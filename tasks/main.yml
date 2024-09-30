@@ -1,0 +1,15 @@
+---
+- name: Update and updgrade
+  ansible.builtin.include_tasks: update_and_upgrade.yml
+
+- name: Install system dependencies
+  ansible.builtin.include_tasks: install_system_dependencies.yml
+
+- name: Install node and Yarn
+  ansible.builtin.include_tasks: install_node_and_yarn.yml
+
+- name: Get Canvas LMS source code
+  ansible.builtin.include_tasks: get_canvas_lms_source_code.yml
+
+- name: Install project dependencies
+  ansible.builtin.include_tasks: install_project_dependencies.yml

@@ -1,0 +1,24 @@
+---
+- name: Asegurarse de que el directorio /var/canvas existe
+  ansible.builtin.file:
+    path: /var/canvas
+    state: directory
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+    mode: "0755"
+
+- name: Clonar el repositorio de Canvas LMS (branch prod, depth 1)
+  ansible.builtin.git:
+    repo: "https://github.com/instructure/canvas-lms.git"
+    dest: /var/canvas
+    version: "prod"
+    depth: 1
+    force: true
+
+- name: Asegurar los permisos correctos en el directorio clonado
+  ansible.builtin.file:
+    path: /var/canvas
+    state: directory
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+    recurse: true

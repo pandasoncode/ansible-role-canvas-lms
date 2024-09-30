@@ -1,0 +1,32 @@
+---
+- name: Asegurarse de que el directorio /var/canvas existe
+  ansible.builtin.file:
+    path: /var/canvas
+    state: directory
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+    mode: '0755'
+
+- name: Instalar Bundler
+  ansible.builtin.command: 
+    cmd: "gem install bundler --version 2.5.10"
+  args:
+    chdir: /var/canvas  # Ejecutar el comando en el directorio /var/canvas
+
+- name: Configurar Bundler para usar el directorio local
+  ansible.builtin.command:
+    cmd: "bundle config set --local path vendor/bundle"
+  args:
+    chdir: /var/canvas  # Ejecutar el comando en el directorio /var/canvas
+
+- name: Ejecutar bundle install
+  ansible.builtin.command:
+    cmd: "bundle install"
+  args:
+    chdir: /var/canvas  # Ejecutar el comando en el directorio /var/canvas
+
+- name: Ejecutar yarn install
+  ansible.builtin.command:
+    cmd: "yarn install"
+  args:
+    chdir: /var/canvas  # Ejecutar el comando en el directorio /var/canvas

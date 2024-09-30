@@ -1,0 +1,41 @@
+---
+# tasks/main.yml
+- name: Ensure git-core is installed
+  ansible.builtin.apt:
+    name: git-core
+    state: present
+    update_cache: true
+
+- name: Ensure software-properties-common is installed
+  ansible.builtin.apt:
+    name: software-properties-common
+    state: present
+    update_cache: true
+
+- name: Add the Instructure Ruby PPA
+  ansible.builtin.apt_repository:
+    repo: ppa:instructure/ruby
+    state: present
+
+- name: Update apt cache after adding repository
+  ansible.builtin.apt:
+    update_cache: true
+
+- name: Install required packages for Ruby and other dependencies
+  ansible.builtin.apt:
+    name:
+      - ruby3.1
+      - ruby3.1-dev
+      - zlib1g-dev
+      - libxml2-dev
+      - libsqlite3-dev
+      - postgresql
+      - libpq-dev
+      - libxmlsec1-dev
+      - libyaml-dev
+      - libidn11-dev
+      - curl
+      - make
+      - g++
+    state: present
+    update_cache: true

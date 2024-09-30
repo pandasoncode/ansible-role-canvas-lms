@@ -1,0 +1,61 @@
+---
+- name: Actualizar el caché de apt
+  ansible.builtin.apt:
+    update_cache: true
+
+- name: Instalar dependencias necesarias
+  ansible.builtin.apt:
+    name: "{{ item }}"
+    state: present
+  loop:
+    - curl
+    - gnupg2
+    - ca-certificates
+    - lsb-release
+
+- name: Añadir la clave GPG para el repositorio de NodeSource
+  ansible.builtin.apt_key:
+    url: "https://deb.nodesource.com/gpgkey/nodesource.gpg.key"
+    state: present
+
+- name: Añadir el repositorio de Node.js 20.x
+  ansible.builtin.apt_repository:
+    repo: "deb https://deb.nodesource.com/node_20.x {{ ansible_distribution_release }} main"
+    state: present
+    update_cache: true
+
+- name: Instalar Node.js 20.x
+  ansible.builtin.apt:
+    name: nodejs
+    state: present
+
+- name: Instalar Yarn utilizando npm
+  ansible.builtin.command:
+    cmd: "npm install --global yarn"
+
+- name: Verificar la instalación de Node.js
+  ansible.builtin.command: node --version
+  register: node_version
+  changed_when: false
+
+- name: Mostrar la versión de Node.js instalada
+  ansible.builtin.debug:
+    msg: "La versión de Node.js instalada es: {{ node_version.stdout }}"
+
+- name: Verificar la instalación de npm
+  ansible.builtin.command: npm --version
+  register: npm_version
+  changed_when: false
+
+- name: Mostrar la versión de npm instalada
+  ansible.builtin.debug:
+    msg: "La versión de npm instalada es: {{ npm_version.stdout }}"
+
+- name: Verificar la instalación de Yarn
+  ansible.builtin.command: yarn --version
+  register: yarn_version
+  changed_when: false
+
+- name: Mostrar la versión de Yarn instalada
+  ansible.builtin.debug:
+    msg: "La versión de Yarn instalada es: {{ yarn_version.stdout }}"
